@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tools.MatGen
 {
-    public static class MatGenService
+    internal static class MatGenService
     {
         public static void CreateMaterialAssets(
             string[] texturePaths,
@@ -22,6 +22,23 @@ namespace Tools.MatGen
                     ? texture.name
                     : texture.name.Replace(nameSource, nameTarget);
                 AssetDatabase.CreateAsset(material, $"{destinationPath}/{name}.mat");
+            }
+            AssetDatabase.Refresh();
+        }
+
+        public static void DuplicateMaterials(
+            Material[] materials,
+            string destinationPath,
+            string nameSource,
+            string nameTarget)
+        {
+            foreach (var material in materials)
+            {
+                var newMaterial = new Material(material);
+                var name = string.IsNullOrEmpty(nameSource)
+                    ? material.name
+                    : material.name.Replace(nameSource, nameTarget);
+                AssetDatabase.CreateAsset(newMaterial, $"{destinationPath}/{name}.mat");
             }
             AssetDatabase.Refresh();
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Tools.MatGen
 {
-    internal class MatGenWindow : EditorWindow
+    internal class MaterialGeneratorWindow : EditorWindow
     {
         private string _destinationPath = Application.dataPath + "/Materials";
         private string _shaderType = "Standard";
@@ -25,39 +25,33 @@ namespace Tools.MatGen
 
         private void OnGUI()
         {
-            ChooseDestination();
-            DrawSeparator(2);
-            ModifyName();
-            DrawSeparator(2);
+            MatGenLayout.ChooseDestination(ref _destinationPath);
+            MatGenLayout.DrawSeparator(2);
+
             ChooseShaderType();
-            DrawSeparator(2);
+            MatGenLayout.DrawSeparator(2);
+
+            MatGenLayout.ModifyName(ref _nameSource, ref _nameTarget);
+            MatGenLayout.DrawSeparator(2);
+
             ShowInputOutputColumns();
-
             GUILayout.Space(4);
-            ShowGenerateButton();
-        }
 
-        private void ChooseDestination()
-        {
-            GUILayout.Label("Choose Destination", EditorStyles.boldLabel);
-            GUILayout.Box(_destinationPath, GUILayout.ExpandWidth(true));
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Browse", GUILayout.Width(150)))
-                _destinationPath = EditorUtility.OpenFolderPanel("Choose Destination", _destinationPath, "");
-            _destinationPath = _destinationPath.Replace(Application.dataPath, "Assets");
-            GUILayout.EndHorizontal();
-        }
+            bool clicked = MatGenLayout.ShowActionButton(
+                "Generate Materials", 
+                "Generate materials from selected textures", 
+                () => MatGenService.CreateMaterialAssets(
+                    _texturePaths,
+                    _destinationPath,
+                    _shaderType,
+                    _shaderTextureInput,
+                    _nameSource,
+                    _nameTarget
+                )
+            );
 
-        private void ModifyName()
-        {
-            GUILayout.Label("Modify Name", EditorStyles.boldLabel);
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Replace: ", GUILayout.Width(55));
-            _nameSource = GUILayout.TextField(_nameSource, GUILayout.Width(100));
-            GUILayout.Label("With: ", GUILayout.Width(32));
-            _nameTarget = GUILayout.TextField(_nameTarget, GUILayout.Width(100));
-            GUILayout.EndHorizontal();
+            if (clicked)
+                Close();
         }
 
         private void ChooseShaderType()
@@ -102,33 +96,6 @@ namespace Tools.MatGen
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndScrollView();
-        }
-
-        private void ShowGenerateButton()
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Generate Materials", GUILayout.Width(150)))
-            {
-                MatGenService.CreateMaterialAssets(
-                    _texturePaths,
-                    _destinationPath,
-                    _shaderType,
-                    _shaderTextureInput,
-                    _nameSource,
-                    _nameTarget
-                );
-                Close();
-            }
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-        }
-
-        private void DrawSeparator(float padding = 0)
-        {
-            GUILayout.Space(padding);
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            GUILayout.Space(padding);
         }
 
         private void UpdateInputOutput()
