@@ -1,14 +1,14 @@
 {
-    "name": "<your package name here>",
-    "displayName": "<your display name here>",
-    "author": "<your name here>",
-    "version": "<your version here>",
-    "unity": "<your unity version here>",
+    "name": "com.adm87.matgen",
+    "displayName": "MatGen - Material Generator",
+    "author": "ADM87",
+    "version": "1.0.0",
+    "unity": "2022.3",
     "hideInEditor": false,
-    "description": "<your description here>",
+    "description": "A simple editor tool to quickly generate a batch of materials for multiple textures.",
     "repository": {
-      "url": "<your repository here>",
+      "url": "https://github.com/ADM87/MatGen",
       "type": "git"
     },
-    "license": "<your license here>"
+    "license": "MIT"
 }
