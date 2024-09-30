@@ -64,7 +64,7 @@ namespace Tools.MatGen
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Choose Shader Type", EditorStyles.boldLabel);
-            GUILayout.Label("Must except a texture input", EditorStyles.miniLabel);
+            GUILayout.Label("Must accept a texture input", EditorStyles.miniLabel);
             GUILayout.EndHorizontal();
 
             var shaderNames = ShaderUtil.GetAllShaderInfo().Select(s => s.name).ToArray();
